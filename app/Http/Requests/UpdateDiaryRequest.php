@@ -22,17 +22,18 @@ class UpdateDiaryRequest extends FormRequest
     public function rules()
     {
         return [
-            'title_update' => 'required|string|max:255',
-            'description_update' => 'required|string',
-            'photo_update' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'photo_update' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:8000',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'title_update.required' => 'Judul tidak boleh kosong',
-            'description_update.required' => 'Deskripsi tidak boleh kosong',
+            'title.required' => 'Judul tidak boleh kosong',
+            'description.required' => 'Deskripsi tidak boleh kosong',
+            'photo_update.max' => 'Ukuran foto tidak boleh lebih dari 8MB',
         ];
     }
 }

@@ -18,24 +18,12 @@ class DetailUserService
             $validatedData['photo'] = $filePath;
         }
 
-        if (Auth::check()) {
-            $validatedData['user_id'] = Auth::id();
-        } else {
-            return redirect()->route('login')->with('error', 'You need to be logged in to add a diary entry.');
-        }
-
-        return [
-            'birthday' => $validatedData['birthday'],
-            'gender' => $validatedData['gender'],
-            'photo' => $validatedData['photo'],
-            'user_id' => $validatedData['user_id']
-        ];
+        return $validatedData['photo'];
     }
 
     public function update(UpdateDetailUSerRequest $request, detailuser $detailuser)
     {
         $validatedData = $request->validated();
-        // dd($validatedData);
         if ($request->hasFile('photo')) {
             if ($detailuser->photo) {
                 Storage::disk('public')->delete($detailuser->photo);
@@ -47,17 +35,6 @@ class DetailUserService
             $validatedData['photo'] = $detailuser->photo;
         }
 
-        if (Auth::check()) {
-            $validatedData['user_id'] = Auth::id();
-        } else {
-            return redirect()->route('login')->with('error', 'You need to be logged in to add a detailuser entry.');
-        }
-
-        return [
-            'birthday' => $validatedData['birthday'],
-            'gender' => $validatedData['gender'],
-            'photo' => $validatedData['photo'],
-            'user_id' => $validatedData['user_id']
-        ];
+        return $validatedData['photo'];
     }
 }

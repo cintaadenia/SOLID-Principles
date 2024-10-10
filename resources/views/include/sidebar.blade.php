@@ -1,19 +1,19 @@
 <style>
     .custom-btn {
-    background-color: #435ebe; /* Ganti dengan warna saat hover */
-    color: #FFFFFF; /* Ganti dengan warna teks yang Anda inginkan */
-    border: none; /* Menghapus border default */
+    background-color: #435ebe; 
+    color: #FFFFFF;
+    border: none;
 }
 
 .custom-btn:hover {
-    background-color: #25396f; /* Ganti dengan warna yang Anda inginkan */
-    color: #FFFFFF; /* Ganti dengan warna teks yang Anda inginkan */
+    background-color: #25396f;
+    color: #FFFFFF;
 
 }
 
 .logo-img {
-    width: 200px; /* Atur lebar sesuai kebutuhan */
-    height: auto; /* Biarkan tinggi mengikuti proporsi gambar */
+    width: 200px;
+    height: auto;
 }
 
 
@@ -84,7 +84,6 @@
                     <a href="{{ route('diary.index') }}" class='sidebar-link' style="display: flex; align-items: center;">
                         <i class="bi bi-folder"></i>
                         <span>Diary</span>
-                        {{-- <p style="margin-left: auto; margin-bottom: 0; color: rgb(163, 164, 164); font-size: 12px;">31</p> --}}
                     </a>
                 </li>
 
@@ -92,16 +91,13 @@
                     <a href="{{ route('gallery.index') }}" class='sidebar-link'>
                         <i class="fa-solid fa-image"></i>
                         <span>Galeri</span>
-                        {{-- <p style="margin-left: auto; margin-bottom: 0; color: rgb(163, 164, 164); font-size: 12px;">31</p> --}}
                     </a>
                 </li>
 
-                {{-- <li class="sidebar-title" style="color: rgb(146, 148, 148);">Daftar Menu</li> --}}
                 <li class="sidebar-item {{ Route::is('favorite.index') ? 'active' : '' }}">
                     <a href="{{ route('favorite.index') }}" class='sidebar-link' style="display: flex; align-items: center;">
-                        <i class="bi bi-star"></i>
+                        <i class="bi bi-heart"></i>
                         <span>Favorit</span>
-                        {{-- <p style="margin-left: auto; margin-bottom: 0; color: rgb(163, 164, 164); font-size: 12px;">31</p> --}}
                     </a>
                 </li>
 
@@ -109,25 +105,44 @@
                     <a href="{{ route('trash.index') }}" class='sidebar-link'>
                         <i class="bi bi-trash"></i>
                         <span>Sampah</span>
-                        {{-- <p style="margin-left: auto; margin-bottom: 0; color: rgb(163, 164, 164); font-size: 12px;">31</p> --}}
                     </a>
                 </li>
 
                 <br>
-                <li class="sidebar-item active ">
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class='sidebar-link'
-                        style="width:8rem; height:2.8rem;">
+                <li class="sidebar-item active">
+                    <a href="#" id="logout-sidebar" class="sidebar-link" style="width:8rem; height:2.8rem; color:#FFFFFF">
+                        <i class="bi bi-box-arrow-right me-2"></i>
+                        Keluar
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
-                        <button type="submit" class='sidebar-link'
-                            style="background:none; border:none; color:white;">
-                            <i class="bi bi-box-arrow-right me-2"></i>
-                            Keluar
-                        </button>
                     </form>
                 </li>
+
+                <script>
+                    document.getElementById('logout-sidebar').addEventListener('click', function(event) {
+                        event.preventDefault();
+                        Swal.fire({
+                            title: "Yakin Anda Ingin keluar?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Ya, keluar!",
+                            cancelButtonText: "Batal"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('logout-form').submit();
+                            }
+                        });
+                    });
+                </script>
             </ul>
         </div>
     </div>
 </div>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 

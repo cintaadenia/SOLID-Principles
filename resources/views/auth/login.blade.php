@@ -6,8 +6,6 @@
 
     <form action="{{ route('login.store') }}" method="POST">
         @csrf
-
-        {{-- <img src="{{ asset('img/Simple_Studio-new.png') }}" alt="Avatar"> --}}
         <img src="{{ asset('img/avatarsaya.png') }}" alt="Avatar">
         <h2 class="title">Welcome</h2>
 
@@ -17,7 +15,8 @@
             </div>
             <div class="div">
                 <h5>Email</h5>
-                <input type="text" class="input" name="email" id="email" value="{{ old('email') }}" @error('email') is-invalid @enderror>
+                <input type="text" class="input" name="email" id="email" value="{{ old('email') }}"
+                    @error('email') is-invalid @enderror>
             </div>
         </div>
         @error('email')

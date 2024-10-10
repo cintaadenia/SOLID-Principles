@@ -122,15 +122,18 @@
                                             <i class="fa-solid fa-edit edit-icon" data-id="{{ $gallery->id }}"
                                                 data-bs-toggle="modal" data-bs-target="#editModal{{ $gallery->id }}"></i>
 
-                                            <form action="{{ route('gallery.destroy', $gallery->id) }}" method="POST"
+                                            <form id="deleteForm-{{ $gallery->id }}"
+                                                action="{{ route('gallery.destroy', $gallery->id) }}" method="POST"
                                                 style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-link p-0 text-decoration-none"
-                                                    style="background: none; border: none;">
+                                                <button type="button"
+                                                    class="btn btn-link p-0 text-decoration-none delete-btn"
+                                                    style="background: none; border: none;" data-id="{{ $gallery->id }}">
                                                     <i class="fa-solid fa-trash delete-icon"></i>
                                                 </button>
                                             </form>
+
                                         </div>
                                     </div>
                                     <div class="card-link">
@@ -168,8 +171,11 @@
                                                                             style="max-width: 450px;">
                                                                     @endif
                                                                     <div class="mb-3">
-                                                                        <label for="photo" class="form-label">Update foto</label>
-                                                                        <input class="form-control form-control-lg" id="photo" type="file" name="photo_update">
+                                                                        <label for="photo" class="form-label">Update
+                                                                            foto</label>
+                                                                        <input class="form-control form-control-lg"
+                                                                            id="photo" type="file"
+                                                                            name="photo_update">
                                                                         @error('photo_update')
                                                                             <div class="text-danger">{{ $message }}</div>
                                                                         @enderror
@@ -180,7 +186,8 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <div class="col-sm-12 d-flex justify-content-end">
-                                                                <button type="submit" class="btn btn-primary rounded-pill">Simpan</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary rounded-pill">Simpan</button>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -190,12 +197,13 @@
                                     </div>
                                 </div>
                             @empty
-                            <div class="col-lg-12 d-flex flex-column align-items-center">
-                                <img src="{{ asset('img/No data-amico.png') }}" alt="kosong"
-                                    style="width: 200px; height: 200px;">
-                                <h5 class="text-center" style="color: #000000">Upss..</h5>
-                                <p class="text-center" style="color: #000000">Maaf, anda masih belum menambahkan data</p>
-                            </div>
+                                <div class="col-lg-12 d-flex flex-column align-items-center">
+                                    <img src="{{ asset('img/No data-amico.png') }}" alt="kosong"
+                                        style="width: 200px; height: 200px;">
+                                    <h5 class="text-center" style="color: #000000">Upss..</h5>
+                                    <p class="text-center" style="color: #000000">Maaf, anda masih belum menambahkan data
+                                    </p>
+                                </div>
                             @endforelse
                         </div>
                     </div>
@@ -219,8 +227,36 @@
                     });
                 });
             });
-            // @if (session("success"))
-            // alert("{{ session('success') }}")
-            // @endif
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const galleryId = this.dataset.id;
+                        Swal.fire({
+                            title: 'Apa kamu yakin?',
+                            text: "Kamu tidak dapat mengembalikannya!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ya, hapus!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: 'Dihapus!',
+                                    text: 'File Anda telah dihapus.',
+                                    icon: 'success'
+                                }).then(() => {
+                                    document.getElementById(`deleteForm-${galleryId}`)
+                                        .submit();
+                                });
+                            }
+                        });
+                    });
+                });
+            });
         </script>
+
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @endsection

@@ -115,9 +115,18 @@ class TrashRepository extends BaseRepository implements TrashInterface
         return $diary->restore();
     }
 
-    
     public function where(mixed $id)
     {
         return $this->model->query()->where('user_id', $id);
+    }
+
+    public function getByUserId($userId)
+    {
+        return $this->model->where('user_id', $userId)->get();
+    }
+
+    public function getAuthTrash($userId)
+    {
+        return $this->model->where('user_id', $userId)->first();
     }
 }

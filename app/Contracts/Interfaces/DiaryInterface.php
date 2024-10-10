@@ -12,4 +12,6 @@ use App\Contracts\Interfaces\Eloquent\UpdateInterface;
 interface DiaryInterface extends GetInterface, StoreInterface, UpdateInterface, DeleteInterface, SearchInterface, ShowInterface
 {
     public function where(mixed $id);
+    public function getByUserId($userId);
+    public function getAuthDiary($userId);
 }

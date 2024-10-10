@@ -11,7 +11,7 @@ use App\Contracts\Interfaces\Eloquent\UpdateInterface;
 
 interface FavoriteInterface extends GetInterface, StoreInterface, UpdateInterface, DeleteInterface, SearchInterface, ShowInterface
 {
+    public function checkIfExists($userId, $diaryId);
     public function where(mixed $id): mixed;
     public function getByUserId($userId);
-    // public function destroy(mixed $id, mixed $diary): mixed;
 }

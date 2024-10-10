@@ -46,7 +46,7 @@
 
     <div class="row">
         @forelse($addFavorite as $diary)
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-4 col-sm-12">
                 <div class="card">
                     <div class="card-content">
                         <div class="card-img-wrapper" style="position: relative; height: 20rem;">
@@ -54,13 +54,16 @@
                                 alt="Diary Image" style="height: 100%; width: 100%; object-fit: cover;">
 
                             <div class="overlay">
-                                <form action="{{ route('favorite.destroy', $diary->id) }}" method="POST"
+
+                                <form id="deleteForm-{{ $diary->id }}"
+                                    action="{{ route('favorite.destroy', $diary->id) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-link p-0 text-decoration-none"
-                                        style="background: none; border: none;">
-                                        <i class="fa-solid fa-trash delete-icon"></i>
+                                    <button type="button"
+                                        class="btn btn-link p-0 text-decoration-none delete-btn"
+                                        style="background: none; border: none;" data-id="{{ $diary->id }}">
+                                        <i class="fa-regular fa-heart delete-icon"></i>
                                     </button>
                                 </form>
                             </div>
@@ -85,4 +88,39 @@
             </div>
         @endforelse
     </div>
+@endsection
+
+
+@section('script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const diaryId = this.dataset.id;
+                    Swal.fire({
+                        title: 'Apa kamu yakin menghapus dari daftar favorit?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Dihapus!',
+                                text: 'File Anda telah dihapus dari daftar favorit.',
+                                icon: 'success'
+                            }).then(() => {
+                                document.getElementById(`deleteForm-${diaryId}`)
+                                    .submit();
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection

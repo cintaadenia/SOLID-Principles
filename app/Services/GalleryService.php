@@ -18,16 +18,7 @@ class GalleryService
             $validatedData['photo'] = $filePath;
         }
 
-        if (Auth::check()) {
-            $validatedData['user_id'] = Auth::id();
-        } else {
-            return redirect()->route('login')->with('error', 'You need to be logged in to add a gallery entry.');
-        }
-
-        return [
-            'photo' => $validatedData['photo'],
-            'user_id' => $validatedData['user_id']
-        ];
+        return $validatedData['photo'];
     }
 
     public function update(UpdateGalleryRequest $request, Gallery $gallery)
@@ -40,19 +31,11 @@ class GalleryService
 
             $fotopath = $request->file('photo_update')->store('photo', 'public');
             $validatedData['photo'] = $fotopath;
+
         }else{
             $validatedData['photo'] = $gallery->photo;
         }
 
-        if (Auth::check()) {
-            $validatedData['user_id'] = Auth::id();
-        } else {
-            return redirect()->route('login')->with('error', 'You need to be logged in to add a diary entry.');
-        }
-
-        return [
-            'photo' => $validatedData['photo'],
-            'user_id' => $validatedData['user_id']
-        ];
+        return $validatedData['photo'];
     }
 }

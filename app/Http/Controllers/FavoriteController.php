@@ -14,14 +14,11 @@ class FavoriteController extends Controller
 {
     private FavoriteInterface $favorite;
     private FavoriteService $service;
-    private FavoriteRepository $favoriteRepository;
 
-
-    public function __construct(FavoriteInterface $favorite, FavoriteService $service, FavoriteRepository $favoriteRepository)
+    public function __construct(FavoriteInterface $favorite, FavoriteService $service)
     {
         $this->favorite = $favorite;
         $this->service = $service;
-        $this->favoriteRepository = $favoriteRepository;
     }
 
     /**
@@ -29,7 +26,7 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        $addFavorite = $this->favoriteRepository->getByUserId(auth()->id());
+        $addFavorite = $this->favorite->getByUserId(auth()->id());
         $user = auth()->user();
         $favorite=$this->favorite->get();
 
@@ -51,9 +48,8 @@ class FavoriteController extends Controller
     public function update(Request $request, $id)
     {
         $userId = Auth::id();
-        // Periksa apakah favorit sudah ada melalui repository
-        $existingFavorite = $this->favoriteRepository->checkIfExists($userId, $id);
 
+        $existingFavorite = $this->favorite->checkIfExists($userId, $id);
 
         if ($existingFavorite) {
 
@@ -61,7 +57,7 @@ class FavoriteController extends Controller
             return to_route('diary.index');
         }
 
-        $this->favoriteRepository->store([
+        $this->favorite->store([
             'user_id' => $userId,
             'diaries_id' => $id,
         ]);

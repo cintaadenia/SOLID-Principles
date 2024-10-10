@@ -18,18 +18,7 @@ class DiaryService
             $validatedData['photo'] = $filePath;
         }
 
-        if (Auth::check()) {
-            $validatedData['user_id'] = Auth::id();
-        } else {
-            return redirect()->route('login')->with('error', 'You need to be logged in to add a diary entry.');
-        }
-
-        return [
-            'title' => $validatedData['title'],
-            'description' => $validatedData['description'],
-            'photo' => $validatedData['photo'],
-            'user_id' => $validatedData['user_id']
-        ];
+        return $validatedData['photo'];
     }
 
     public function update(UpdateDiaryRequest $request, Diary $diary)
@@ -46,17 +35,6 @@ class DiaryService
             $validatedData['photo'] = $diary->photo;
         }
 
-        if (Auth::check()) {
-            $validatedData['user_id'] = Auth::id();
-        } else {
-            return redirect()->route('login')->with('error', 'You need to be logged in to add a diary entry.');
-        }
-
-        return [
-            'title' => $validatedData['title_update'],
-            'description' => $validatedData['description_update'],
-            'photo' => $validatedData['photo'],
-            'user_id' => $validatedData['user_id']
-        ];
+        return $validatedData['photo'];
     }
 }

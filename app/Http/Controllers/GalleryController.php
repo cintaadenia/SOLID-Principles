@@ -27,10 +27,11 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        $authgallery = $this->gallery->where(Auth::user()->id);
         $auth = Auth::user();
-        $gallery=$this->gallery->where($auth->id)->get();
-        $service=$this->service;
+        $gallery = $this->gallery->getByUserId($auth->id);
+        $authgallery = $this->gallery->getAuthGallery($auth->id);
+
+        $service = $this->service;
 
         return view('gallery.gallery', compact('gallery', 'service', 'authgallery', 'auth' ));
     }
@@ -48,7 +49,10 @@ class GalleryController extends Controller
      */
     public function store(GalleryRequest $request)
     {
-        $data = $this->service->store($request);
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
+        $data["photo"] = $this->service->store($request);
+
         $this->gallery->store($data);
 
         flash()->success('Data berhasil Ditambahkan.');
@@ -76,7 +80,9 @@ class GalleryController extends Controller
      */
     public function update(UpdateGalleryRequest $request, Gallery $gallery)
     {
-        $data = $this->service->update($request, $gallery);
+        $data = $request->validated();
+        $data["photo"] = $this->service->update($request, $gallery);
+
         $this->gallery->update($gallery->id, $data);
 
         flash()->success('Data berhasil Diperbarui.');
@@ -93,7 +99,6 @@ class GalleryController extends Controller
             return back()->with('error');
         }
 
-        flash()->success('Data berhasil Dihapus.');
         return back();
     }
 }

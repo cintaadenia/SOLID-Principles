@@ -27,11 +27,11 @@ class DetailuserController extends Controller
      */
     public function index()
     {
-        $profile = $this->detailuser->where(Auth::user()->id);
         $auth = Auth::user();
-        $detailuser=$this->detailuser->where($auth->id)->with("user")->first();
-        $service=$this->service;
-        // dd($detailuser);
+        $profile = $this->detailuser->getByUserId($auth->id);
+        $detailuser = $this->detailuser->getAuthDetailUser($auth->id);
+
+        $service = $this->service;
 
         return view('detail.detailuser', compact('detailuser', 'service', 'profile', 'auth'));
     }
@@ -50,13 +50,15 @@ class DetailuserController extends Controller
 
     public function store(DetailUserRequest $request)
     {
-        $data = $this->service->store($request);
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
+        $data["photo"] = $this->service->store($request);
+
         $this->detailuser->store($data);
 
         flash()->success('Berhasil Menambahkan data.');
         return to_route('detailuser.index');
     }
-
 
     /**
      * Display the specified resource.
@@ -79,7 +81,11 @@ class DetailuserController extends Controller
      */
     public function update(UpdateDetailUSerRequest $request, detailuser $detailuser)
     {
-        $data = $this->service->update($request, $detailuser);
+        $data['user_id'] = Auth::id();
+
+        $data = $request->validated();
+        $data["photo"] = $this->service->update($request, $detailuser);
+
         $this->detailuser->update($detailuser->id, $data);
 
         flash()->success('Profil berhasil diperbarui.');
@@ -91,12 +97,11 @@ class DetailuserController extends Controller
      */
     public function destroy(detailuser $detailuser)
     {
-        if (!$this->detailuser->delete($detailuser->id)) {
+        // if (!$this->detailuser->delete($detailuser->id)) {
 
-            return back()->with('error');
-        }
+        //     return back()->with('error');
+        // }
 
-        flash()->success('Data profil berhasil Dihapus.');
-        return back();
+        // return back();
     }
 }

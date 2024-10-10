@@ -99,4 +99,14 @@ class DiaryRepository extends BaseRepository implements DiaryInterface
     {
         return $this->model->query()->where('user_id', $id);
     }
+
+    public function getByUserId($userId)
+    {
+        return $this->model->where('user_id', $userId)->get();
+    }
+
+    public function getAuthDiary($userId)
+    {
+        return $this->model->where('user_id', $userId)->first();
+    }
 }

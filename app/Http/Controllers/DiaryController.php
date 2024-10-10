@@ -28,10 +28,11 @@ class DiaryController extends Controller
      */
     public function index()
     {
-        $authdiary = $this->diary->where(Auth::user()->id);
         $auth = Auth::user();
-        $diaries=$this->diary->where($auth->id)->get();
-        $service=$this->service;
+        $diaries = $this->diary->getByUserId($auth->id);
+        $authdiary = $this->diary->getAuthDiary($auth->id);
+
+        $service = $this->service;
 
         return view('diary.diary', compact('diaries', 'service', 'auth', 'authdiary'));
     }
@@ -50,13 +51,15 @@ class DiaryController extends Controller
 
     public function store(DiaryRequest $request)
     {
-        $data = $this->service->store($request);
+        $data = $request->validated();
+        $data['user_id'] = Auth::id();
+        $data["photo"] = $this->service->store($request);
+
         $this->diary->store($data);
 
         flash()->success('Berhasil Menambahakan data.');
         return to_route('diary.index');
     }
-
 
     /**
      * Display the specified resource.
@@ -79,9 +82,12 @@ class DiaryController extends Controller
      */
     public function update(UpdateDiaryRequest $request, Diary $diary)
     {
-        $data = $this->service->update($request, $diary);
-        $this->diary->update($diary->id, $data);
+        $data['user_id'] = Auth::id();
 
+        $data = $request->validated();
+        $data["photo"] = $this->service->update($request, $diary);
+
+        $this->diary->update($diary->id, $data);
 
         flash()->success('Data berhasil Diperbarui.');
         return to_route('diary.index');
@@ -97,7 +103,6 @@ class DiaryController extends Controller
             return back()->with('error');
         }
 
-        flash()->success('Data berhasil Dihapus.');
         return back();
     }
 
@@ -105,5 +110,4 @@ class DiaryController extends Controller
     {
         return view('calendar.calendar');
     }
-
 }

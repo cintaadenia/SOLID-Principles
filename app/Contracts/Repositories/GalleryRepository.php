@@ -99,4 +99,14 @@ class GalleryRepository extends BaseRepository implements GalleryInterface
     {
         return $this->model->query()->where('user_id', $id);
     }
+
+    public function getByUserId($userId)
+    {
+        return $this->model->where('user_id', $userId)->get();
+    }
+
+    public function getAuthGallery($userId)
+    {
+        return $this->model->where('user_id', $userId)->first();
+    }
 }

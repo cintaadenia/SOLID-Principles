@@ -45,7 +45,7 @@
     </style>
     <div class="row">
         @forelse($trashedDiaries as $trashed)
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-4 col-sm-12">
                 <div class="card">
                     <div class="card-content">
                         <div class="card-img-wrapper" style="position: relative; height: 20rem;">
@@ -61,12 +61,15 @@
                                         <i class="fa-solid fa-rotate-left edit-icon"></i>
                                     </button>
                                 </form>
-                                <form action="{{ route('forceDelete', $trashed->id) }}" method="POST"
+
+                                <form id="deleteForm-{{ $trashed->id }}"
+                                    action="{{ route('forceDelete', $trashed->id) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-link p-0 text-decoration-none"
-                                        style="background: none; border: none;">
+                                    <button type="button"
+                                        class="btn btn-link p-0 text-decoration-none delete-btn"
+                                        style="background: none; border: none;" data-id="{{ $trashed->id }}">
                                         <i class="fa-solid fa-trash delete-icon"></i>
                                     </button>
                                 </form>
@@ -91,4 +94,41 @@
             </div>
         @endforelse
     </div>
+@endsection
+
+
+@section('script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const diaryId = this.dataset.id;
+                    Swal.fire({
+                        title: 'Apa kamu yakin?',
+                        text: "Kamu tidak dapat mengembalikannya!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Dihapus!',
+                                text: 'File Anda telah dihapus permanen!.',
+                                icon: 'success'
+                            }).then(() => {
+                                document.getElementById(`deleteForm-${diaryId}`)
+                                    .submit();
+                            });
+                        }
+                    });
+                });
+            });
+        });
+
+    </script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection

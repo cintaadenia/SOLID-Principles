@@ -16,27 +16,25 @@ class TrashController extends Controller
 
     private TrashInterface $Trash;
     private TrashService $service;
-    private TrashRepository $diaryRepository;
 
-
-    public function __construct(TrashInterface $Trash, TrashService $service, TrashRepository $diaryRepository)
+    public function __construct(TrashInterface $Trash, TrashService $service)
     {
         $this->Trash = $Trash;
         $this->service = $service;
-        $this->diaryRepository = $diaryRepository;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $authtrash = $this->diaryRepository->where(Auth::user()->id);
         $auth = Auth::user();
-        $trash=$this->diaryRepository->where($auth->id)->get();
+        $trash = $this->Trash->getByUserId($auth->id);
+        $authtrash = $this->Trash->getAuthTrash($auth->id);
+        $trashedDiaries = $this->Trash->getTrashedDiaries($auth->id);
 
-        $trashedDiaries = $this->diaryRepository->getTrashedDiaries($auth->id);
+        $service = $this->service;
 
-        return view('trash.trash', compact('trashedDiaries', 'authtrash', 'auth', 'trash'));
+        return view('trash.trash', compact('trashedDiaries', 'authtrash', 'auth', 'trash', 'service'));
     }
 
     /**
@@ -84,13 +82,12 @@ class TrashController extends Controller
      */
     public function destroy(Trash $trash)
     {
-
+        //
     }
-
 
     public function restore($id)
     {
-        $this->diaryRepository->restore($id);
+        $this->Trash->restore($id);
 
         flash()->success('Data berhasil dipulihkan!');
         return redirect()->route('trash.index');
@@ -98,14 +95,13 @@ class TrashController extends Controller
 
     public function forceDelete($id)
     {
-        $this->diaryRepository->forceDelete($id);
+        $this->Trash->forceDelete($id);
 
         flash()->success('Data berhasil Dihapus permanen!');
         return redirect()->route('trash.index');
     }
 
     /**
- * Display a listing of soft-deleted resources.
- */
-
+     * Display a listing of soft-deleted resources.
+     */
 }

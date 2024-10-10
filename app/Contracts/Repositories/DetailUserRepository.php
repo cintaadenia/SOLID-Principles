@@ -99,4 +99,14 @@ class DetailUserRepository extends BaseRepository implements DetailUserInterface
     {
         return $this->model->query()->where('user_id', $id);
     }
+
+    public function getByUserId($userId)
+    {
+        return $this->model->with("user")->where('user_id', $userId)->get();
+    }
+
+    public function getAuthDetailUser($userId)
+    {
+        return $this->model->where('user_id', $userId)->first();
+    }
 }

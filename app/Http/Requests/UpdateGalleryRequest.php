@@ -22,7 +22,14 @@ class UpdateGalleryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo_update' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo_update' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:8000',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'photo_update.max' => 'Ukuran foto tidak boleh lebih dari 8MB',
         ];
     }
 }

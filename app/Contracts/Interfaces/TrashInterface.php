@@ -12,4 +12,9 @@ use App\Contracts\Interfaces\Eloquent\UpdateInterface;
 interface TrashInterface extends GetInterface, StoreInterface, UpdateInterface, DeleteInterface, SearchInterface, ShowInterface
 {
     public function where(mixed $id);
+    public function getByUserId($userId);
+    public function getAuthTrash($userId);
+    public function getTrashedDiaries($id);
+    public function restore($id);
+    public function forceDelete($id);
 }

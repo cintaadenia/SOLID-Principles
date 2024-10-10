@@ -64,7 +64,7 @@
                                     <div class="form-group">
                                         <label for="basicInput">Judul</label>
                                         <input type="text" class="form-control" id="basicInput"
-                                            placeholder="Silahkan masukkan judul" name="title">
+                                            placeholder="Silahkan masukkan judul" name="title" style="width: 100%; height: 50px;">
                                         @error('title')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -72,7 +72,8 @@
 
                                     <div>
                                         <label for="formFileLg" class="form-label">Upload Foto</label>
-                                        <input class="form-control form-control-lg" id="formFileLg" type="file" name="photo">
+                                        <input class="form-control form-control-lg" id="formFileLg" type="file"
+                                            name="photo">
                                         @error('photo')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
@@ -83,7 +84,9 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <label for="roundText">Deskripsi</label>
-                                                    <textarea id="roundText" class="form-control round" placeholder="Ekspresikan disini" name="description"></textarea>
+                                                    <textarea id="roundText" class="form-control round"
+                                                              placeholder="Ekspresikan disini" name="description"
+                                                              style="width: 100%; height: 200px;"></textarea>
                                                     @error('description')
                                                         <div class="text-danger">{{ $message }}</div>
                                                     @enderror
@@ -125,7 +128,7 @@
 
     <div class="row">
         @forelse($diaries as $diary)
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-4 col-sm-12">
                 <div class="card">
                     <div class="card-content">
                         <div class="card-img-wrapper" style="position: relative; height: 20rem;">
@@ -136,12 +139,14 @@
                                 <i class="fa-solid fa-edit edit-icon" data-id="{{ $diary->id }}" data-bs-toggle="modal"
                                     data-bs-target="#editModal{{ $diary->id }}"></i>
 
-                                <form action="{{ route('diary.destroy', $diary->id) }}" method="POST"
+                                <form id="deleteForm-{{ $diary->id }}"
+                                    action="{{ route('diary.destroy', $diary->id) }}" method="POST"
                                     style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-link p-0 text-decoration-none"
-                                        style="background: none; border: none;">
+                                    <button type="button"
+                                        class="btn btn-link p-0 text-decoration-none delete-btn"
+                                        style="background: none; border: none;" data-id="{{ $diary->id }}">
                                         <i class="fa-solid fa-trash delete-icon"></i>
                                     </button>
                                 </form>
@@ -155,7 +160,9 @@
                                     @csrf
                                     @method('PUT')
                                     <button class="btn btn-link p-2 m-1 text-decoration-none">
-                                        <i class="bi bi-star d-flex align-items-center justify-content-center text-secondary"></i>
+                                        <i
+                                            class="bi bi-heart d-flex align-items-center justify-content-center text-secondary">
+                                        </i>
                                     </button>
                                 </form>
                             </div>
@@ -192,9 +199,9 @@
                                             <div class="form-group">
                                                 <label for="title">Judul</label>
                                                 <input type="text" class="form-control" id="title"
-                                                    name="title_update" placeholder="Silahkan masukkan judul"
-                                                    value="{{ old('title_update', $diary->title) }}">
-                                                @error('title_update')
+                                                    name="title" placeholder="Silahkan masukkan judul" style="width: 100%; height: 50px;"
+                                                    value="{{ old('title', $diary->title) }}">
+                                                @error('title')
                                                     <div class="text-danger">{{ $message }}</div>
                                                 @enderror
                                             </div>
@@ -206,7 +213,8 @@
                                                 @endif
                                                 <div class="mb-3">
                                                     <label for="photo" class="form-label">Update foto</label>
-                                                    <input class="form-control form-control-lg" id="photo" type="file" name="photo_update">
+                                                    <input class="form-control form-control-lg" id="photo"
+                                                        type="file" name="photo_update">
                                                     @error('photo_update')
                                                         <div class="text-danger">{{ $message }}</div>
                                                     @enderror
@@ -217,8 +225,8 @@
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <label for="description">Deskripsi</label>
-                                                            <textarea id="description" class="form-control round" placeholder="Ekspresikan disini" name="description_update">{{ old('description_update', $diary->description) }}</textarea>
-                                                            @error('description_update')
+                                                            <textarea id="description" class="form-control round" placeholder="Ekspresikan disini" name="description" style="width: 100%; height: 200px;">{{ old('description', $diary->description) }}</textarea>
+                                                            @error('description')
                                                                 <div class="text-danger">{{ $message }}</div>
                                                             @enderror
                                                         </div>
@@ -239,12 +247,11 @@
                 </div>
             </div>
         @empty
-        <div class="col-lg-12 d-flex flex-column align-items-center">
-            <img src="{{ asset('img/No data-amico.png') }}" alt="kosong"
-                style="width: 200px; height: 200px;">
-            <h5 class="text-center" style="color: #000000">Upss..</h5>
-            <p class="text-center" style="color: #000000">Maaf, anda masih belum menambahkan data</p>
-        </div>
+            <div class="col-lg-12 d-flex flex-column align-items-center">
+                <img src="{{ asset('img/No data-amico.png') }}" alt="kosong" style="width: 200px; height: 200px;">
+                <h5 class="text-center" style="color: #000000">Upss..</h5>
+                <p class="text-center" style="color: #000000">Maaf, anda masih belum menambahkan data</p>
+            </div>
         @endforelse
     </div>
 @endsection
@@ -269,5 +276,36 @@
                 });
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const diaryId = this.dataset.id;
+                    Swal.fire({
+                        title: 'Apa kamu yakin ingin menambahkan ke daftar sampah?',
+                        text: "Kamu dapat mengembalikannya!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Dihapus!',
+                                text: 'File Anda telah dihapus.',
+                                icon: 'success'
+                            }).then(() => {
+                                document.getElementById(`deleteForm-${diaryId}`)
+                                    .submit();
+                            });
+                        }
+                    });
+                });
+            });
+        });
     </script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
