@@ -26,8 +26,8 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        $addFavorite = $this->favorite->getByUserId(auth()->id());
-        $user = auth()->user();
+        $addFavorite = $this->favorite->getByUserId(Auth::id());
+        $user = Auth::user();
         $favorite=$this->favorite->get();
 
         return view('Favorite.Favorite', compact('favorite', 'addFavorite', 'user'));
