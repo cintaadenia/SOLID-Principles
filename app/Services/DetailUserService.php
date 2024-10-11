@@ -5,17 +5,20 @@ namespace App\Services;
 use App\Http\Requests\DetailUserRequest;
 use App\Http\Requests\UpdateDetailUSerRequest;
 use App\Models\detailuser;
+use App\Traits\FileTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class DetailUserService
 {
+    use FileTrait;
+
     public function store(DetailUserRequest $request)
     {
         $validatedData = $request->validated();
+
         if ($request->hasFile('photo')) {
-            $filePath = $request->file('photo')->store('detailuser_photos', 'public');
-            $validatedData['photo'] = $filePath;
+            $validatedData['photo'] = $this->upload('detailuser_photos', $request->file('photo'));
         }
 
         return $validatedData['photo'];
@@ -24,13 +27,11 @@ class DetailUserService
     public function update(UpdateDetailUSerRequest $request, detailuser $detailuser)
     {
         $validatedData = $request->validated();
+        
         if ($request->hasFile('photo')) {
-            if ($detailuser->photo) {
-                Storage::disk('public')->delete($detailuser->photo);
-            }
+            $this->remove($detailuser->photo);
+            $validatedData['photo'] = $this->upload('detailuser_photos', $request->file('photo'));
 
-            $fotopath = $request->file('photo')->store('photo', 'public');
-            $validatedData['photo'] = $fotopath;
         }else{
             $validatedData['photo'] = $detailuser->photo;
         }

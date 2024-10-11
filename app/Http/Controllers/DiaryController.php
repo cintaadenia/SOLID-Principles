@@ -34,7 +34,7 @@ class DiaryController extends Controller
 
         $service = $this->service;
 
-        return view('diary.diary', compact('diaries', 'service', 'auth', 'authdiary'));
+        return view('diary.diary', compact('auth', 'diaries', 'authdiary', 'service'));
     }
 
     /**

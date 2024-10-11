@@ -33,7 +33,7 @@ class DetailuserController extends Controller
 
         $service = $this->service;
 
-        return view('detail.detailuser', compact('detailuser', 'service', 'profile', 'auth'));
+        return view('detail.detailuser', compact('auth', 'profile', 'detailuser', 'service' ));
     }
 
     /**

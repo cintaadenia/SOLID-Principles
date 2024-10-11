@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\Interfaces\TrashInterface;
-use App\Contracts\Repositories\TrashRepository;
-use App\Models\Diary;
 use App\Models\Trash;
 use App\Services\TrashService;
 use Illuminate\Http\Request;
@@ -34,7 +32,7 @@ class TrashController extends Controller
 
         $service = $this->service;
 
-        return view('trash.trash', compact('trashedDiaries', 'authtrash', 'auth', 'trash', 'service'));
+        return view('trash.trash', compact('auth', 'trash', 'authtrash', 'trashedDiaries', 'service'));
     }
 
     /**

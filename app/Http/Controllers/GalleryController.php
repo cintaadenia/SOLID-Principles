@@ -33,7 +33,7 @@ class GalleryController extends Controller
 
         $service = $this->service;
 
-        return view('gallery.gallery', compact('gallery', 'service', 'authgallery', 'auth' ));
+        return view('gallery.gallery', compact( 'auth', 'gallery', 'authgallery', 'service' ));
     }
 
     /**

@@ -50,13 +50,18 @@
                             <div class="container">
                                 <h6 class="align-right">
                                     @isset($detailuser->gender)
-                                        <i class="fa-solid fa-genderless"></i> {{ $detailuser->gender }}
+                                        @if($detailuser->gender === 'Perempuan')
+                                            <i class="fa-solid fa-venus"></i> {{ $detailuser->gender }}
+                                        @elseif($detailuser->gender === 'Laki-laki')
+                                            <i class="fa-solid fa-mars"></i> {{ $detailuser->gender }}
+                                        @endif
                                     @endisset
                                 </h6>
+
                                 <h6 class="align-right">
                                     @isset($detailuser->birthday)
                                         <i class="fas fa-birthday-cake"></i>
-                                        {{ \Carbon\Carbon::parse($detailuser->birthday)->format('d M Y') }}
+                                        {{ Carbon\Carbon::parse($detailuser->birthday)->locale('id')->isoFormat('D MMMM YYYY') }}
                                     @endisset
                                 </h6>
                             </div>
@@ -135,8 +140,7 @@
                                             <div class="col-12 d-flex justify-content-end">
                                                 <button type="submit"
                                                     class="btn btn-primary rounded-pill">{{ isset($detailuser) ? 'Perbarui Profil' : 'Buat Profil' }}</button>
-                                                <button type="reset"
-                                                    class="btn btn-light-secondary rounded-pill">Batal</button>
+                                                <button type="reset" class="btn btn-light-secondary rounded-pill">Batal</button>
                                             </div>
                                         </div>
                                     </div>

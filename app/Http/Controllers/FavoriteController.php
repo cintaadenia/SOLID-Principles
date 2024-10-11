@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\Interfaces\FavoriteInterface;
-use App\Contracts\Repositories\FavoriteRepository;
-use App\Models\Diary;
 use App\Models\Favorite;
 use App\Services\FavoriteService;
 use Illuminate\Http\Request;
@@ -30,7 +28,7 @@ class FavoriteController extends Controller
         $user = Auth::user();
         $favorite=$this->favorite->get();
 
-        return view('Favorite.Favorite', compact('favorite', 'addFavorite', 'user'));
+        return view('Favorite.Favorite', compact('addFavorite', 'user', 'favorite'));
     }
 
 

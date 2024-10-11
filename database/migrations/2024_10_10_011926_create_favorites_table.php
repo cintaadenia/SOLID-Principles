@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('diaries_id')->nullable()->constrained('diaries')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('galleries_id')->nullable()->constrained('galleries')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('notes_id')->nullable()->constrained('notes')->cascadeOnDelete()->cascadeOnUpdate();
+            // $table->foreignId('notes_id')->nullable()->constrained('notes')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

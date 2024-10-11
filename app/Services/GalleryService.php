@@ -5,17 +5,20 @@ namespace App\Services;
 use App\Http\Requests\GalleryRequest;
 use App\Http\Requests\UpdateGalleryRequest;
 use App\Models\Gallery;
+use App\Traits\FileTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class GalleryService
 {
+    use FileTrait;
+
     public function store(GalleryRequest $request)
     {
         $validatedData = $request->validated();
+        
         if ($request->hasFile('photo')) {
-            $filePath = $request->file('photo')->store('gallery_photos', 'public');
-            $validatedData['photo'] = $filePath;
+            $validatedData['photo'] = $this->upload('gallery_photos', $request->file('photo'));
         }
 
         return $validatedData['photo'];
@@ -24,13 +27,10 @@ class GalleryService
     public function update(UpdateGalleryRequest $request, Gallery $gallery)
     {
         $validatedData = $request->validated();
-        if ($request->hasFile('photo_update')) {
-            if ($gallery->photo) {
-                Storage::disk('public')->delete($gallery->photo);
-            }
 
-            $fotopath = $request->file('photo_update')->store('photo', 'public');
-            $validatedData['photo'] = $fotopath;
+        if ($request->hasFile('photo_update')) {
+            $this->remove($gallery->photo);
+            $validatedData['photo'] = $this->upload('gallery_photos', $request->file('photo_update'));
 
         }else{
             $validatedData['photo'] = $gallery->photo;
